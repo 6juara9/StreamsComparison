@@ -1,7 +1,8 @@
-package cases
+package instruments
 
 /**
  * Comparing stream cases
+ *
  * @tparam F - stream context
  */
 trait TestCases[F[_]] {

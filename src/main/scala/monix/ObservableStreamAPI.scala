@@ -1,10 +1,11 @@
 package monix
 
-import cases.TestCases
+import instruments.{TestCases, Timer}
 import monix.eval.Task
 import monix.reactive.Observable
 
-class ObservableStreamAPI extends TestCases[Task] {
+class ObservableStreamAPI extends TestCases[Task]
+  with Timer[Task] {
 
   override def rangeToListOfStrings(
     range: Range
@@ -13,4 +14,15 @@ class ObservableStreamAPI extends TestCases[Task] {
       .from(range)
       .map(_.toString)
       .toListL
+
+  override def apiName: String = "monix-streams"
+
+  override def timer[R](
+    task: => Task[R], retries: Int
+  ): Task[List[Unit]] = Task.sequence(List.fill(retries)(timer(task)))
+
+  override def timer[R](task: => Task[R]): Task[Unit] =
+    task
+      .timed
+      .foreachL { case (duration, _) => printTime(duration.toMillis) }
 }
