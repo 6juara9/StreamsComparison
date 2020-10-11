@@ -22,13 +22,10 @@ class AkkaStreamAPI(implicit mat: Materializer, ec: ExecutionContext) extends Te
 
   override def timer[R](
     task: => Future[R], retries: Int
-  ): Future[List[Unit]] = Future.sequence(List.fill(retries)(timer(task)))
+  ): Future[Unit] = Future.sequence(List.fill(retries)(timer(task))).map(printTime)
 
-  override def timer[R](task: => Future[R]): Future[Unit] = {
+  override def timer[R](task: => Future[R]): Future[Long] = {
     val startTime = getMillis
-    for {
-      _ <- task
-      resultTime = getMillis - startTime
-    } yield printTime(resultTime)
+    task.map(_ => getMillis - startTime)
   }
 }

@@ -15,12 +15,12 @@ class ZStreamAPI extends TestCases[Task]
 
   override def timer[R](
     task: => Task[R], retries: Int
-  ): Task[List[Unit]] = ZIO.collectAll(List.fill(retries)(timer(task)))
+  ): Task[Unit] = ZIO.collectAll(List.fill(retries)(timer(task))).map(printTime)
 
   override def timer[R](
     task: => Task[R]
-  ): Task[Unit] = task
+  ): Task[Long] = task
     .timed
-    .map { case (duration, _) => printTime(duration.toMillis) }
+    .map(_._1.toMillis)
     .provideLayer(Clock.live)
 }

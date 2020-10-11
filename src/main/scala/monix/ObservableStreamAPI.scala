@@ -19,10 +19,8 @@ class ObservableStreamAPI extends TestCases[Task]
 
   override def timer[R](
     task: => Task[R], retries: Int
-  ): Task[List[Unit]] = Task.sequence(List.fill(retries)(timer(task)))
+  ): Task[Unit] = Task.sequence(List.fill(retries)(timer(task))).map(printTime)
 
-  override def timer[R](task: => Task[R]): Task[Unit] =
-    task
-      .timed
-      .foreachL { case (duration, _) => printTime(duration.toMillis) }
+  override def timer[R](task: => Task[R]): Task[Long] =
+    task.timed.map(_._1.toMillis)
 }
