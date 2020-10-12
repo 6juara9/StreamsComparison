@@ -3,8 +3,7 @@ package jmh
 import java.util.concurrent.TimeUnit
 
 import akka.stream.scaladsl.{Sink, Source}
-import jmh.TestData.{zioRuntime, _}
-import monix.execution.Scheduler.Implicits.global
+import jmh.TestData._
 import monix.reactive.Observable
 import org.openjdk.jmh.annotations.{Benchmark, BenchmarkMode, Mode, OutputTimeUnit}
 import zio.Chunk
