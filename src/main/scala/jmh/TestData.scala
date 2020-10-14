@@ -14,4 +14,8 @@ object TestData {
   implicit val mat: Materializer = Materializer(system)
   val zioRuntime: zio.Runtime[zio.ZEnv] = zio.Runtime.default.withExecutor(Executor.fromExecutionContext(2048)(ec))
   implicit val monixScheduler: Scheduler = Scheduler.apply(ec)
+
+  sys.addShutdownHook {
+    system.terminate()
+  }
 }

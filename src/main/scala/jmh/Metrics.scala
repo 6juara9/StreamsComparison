@@ -11,12 +11,12 @@ import zio.stream.ZStream
 
 import scala.concurrent.Future
 
+@BenchmarkMode(Array(Mode.All))
+@OutputTimeUnit(TimeUnit.NANOSECONDS)
 class Metrics {
 
   @Benchmark
-  @BenchmarkMode(Array(Mode.AverageTime))
-  @OutputTimeUnit(TimeUnit.NANOSECONDS)
-  def checkZio(): Chunk[String] =
+  def checkListOfIntsToStringZio(): Chunk[String] =
     zioRuntime
       .unsafeRun(
         ZStream
@@ -27,18 +27,17 @@ class Metrics {
 
 
   @Benchmark
-  @BenchmarkMode(Array(Mode.AverageTime))
-  @OutputTimeUnit(TimeUnit.NANOSECONDS)
-  def checkMonix(): List[String] =
+  def checkListOfIntsToStringMonix(): List[String] =
     Observable
       .from(TestData.listOfInt)
       .map(_.toString)
-      .toListL.runSyncUnsafe()
+      .toListL
+      .runSyncUnsafe()
 
 
   @Benchmark
-  @BenchmarkMode(Array(Mode.AverageTime))
-  @OutputTimeUnit(TimeUnit.NANOSECONDS)
-  def checkAkka(): Future[List[String]] =
-    Source(TestData.listOfInt).map(_.toString).runWith(Sink.collection[String, List[String]])
+  def checkListOfIntsToStringAkka(): Future[List[String]] =
+    Source(TestData.listOfInt)
+      .map(_.toString)
+      .runWith(Sink.collection[String, List[String]])
 }
