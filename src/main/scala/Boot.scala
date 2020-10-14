@@ -1,3 +1,5 @@
+import java.io.File
+
 import akka.AkkaStreamAPI
 import akka.actor.ActorSystem
 import akka.stream.Materializer
@@ -10,15 +12,11 @@ object Boot extends App {
   val system = ActorSystem()
   implicit val mat: Materializer = Materializer(system)
 
-  val akkaStreamAPI = new AkkaStreamAPI()
-  val monixStreamAPI = new ObservableStreamAPI()
-  val zioStreamAPI = new ZStreamAPI
+  val parallelism = 10
+  val akkaStreamAPI = new AkkaStreamAPI(parallelism)
+  val monixStreamAPI = new ObservableStreamAPI(parallelism)
+  val zioStreamAPI = new ZStreamAPI(parallelism)
 
   val range = 1 to 100000
-
-  for {
-    _ <- akkaStreamAPI.timer(akkaStreamAPI.rangeToListOfStrings(range), 30)
-    _ <- monixStreamAPI.timer(monixStreamAPI.rangeToListOfStrings(range), 30).runToFuture
-    _ <- zio.Runtime.global.unsafeRunToFuture(zioStreamAPI.timer(zioStreamAPI.rangeToListOfStrings(range), 30))
-  } yield println("Finished")
+  val file = new File("src/main/resources/test_file.tsv")
 }

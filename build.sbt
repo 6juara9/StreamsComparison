@@ -1,4 +1,3 @@
-
 name := "StreamsComparison"
 
 version := "0.1"
