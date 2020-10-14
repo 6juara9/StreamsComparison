@@ -1,5 +1,7 @@
 package instruments
 
+import java.io.File
+
 /**
  * Comparing stream cases
  *
@@ -8,5 +10,7 @@ package instruments
 trait TestCases[F[_]] {
 
   def rangeToListOfStrings(range: Range): F[List[String]]
+
+  def countCharsInEachLine(file: File): F[Unit]
 
 }
