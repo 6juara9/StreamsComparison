@@ -29,7 +29,8 @@ jobs:
         run: |
           git config --global user.name 'Schema generator'
           git config --global user.email 'schema-generator@users.noreply.github.com'
-          git commit -am "Automated report"
+          git add .
+          git commit -m "Automated report"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
