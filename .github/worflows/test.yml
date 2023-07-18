@@ -2,6 +2,7 @@ name: TEST WORKFLOW
 
 on:
   issue_comment:
+    types: [created, deleted, edited]
 
 jobs:
   pr_commented:
