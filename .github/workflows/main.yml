@@ -21,5 +21,10 @@ jobs:
           NUMBER: ${{ github.event.issue.pull_request.number }}
       - name: Checkout PR
         run: gh pr checkout ${{ github.event.issue.number }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+
       - name: Push changes
         run: git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
