@@ -12,8 +12,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       - run: |
-          echo "This is some text to be added to the file." > new_file.txt
-      - run: |
           echo A comment on PR $NUMBER
         env:
           NUMBER: ${{ github.event.issue.number }}
@@ -21,10 +19,13 @@ jobs:
           echo PR number is $NUMBER
         env:
           NUMBER: ${{ github.event.issue.pull_request.number }}
+      - run: echo ${{ github.event.comment.body }}
       - name: Checkout PR
         run: gh pr checkout ${{ github.event.issue.number }}
         env:
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+      - run: |
+          echo "This is some text to be added to the file." > new_file.txt
       - name: Commit changes
         run: |
           git config --global user.name 'Schema generator'
