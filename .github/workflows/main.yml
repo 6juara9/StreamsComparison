@@ -1,4 +1,6 @@
-on: issue_comment
+on:
+  issue_comment:
+     types: [created]
 
 jobs:
   pr_commented:
@@ -8,17 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
+          echo "This is some text to be added to the file." > new_file.txt
+      - run: |
           echo A comment on PR $NUMBER
         env:
           NUMBER: ${{ github.event.issue.number }}
-
-  issue_commented:
-    # This job only runs for issue comments
-    name: Issue comment
-    if: ${{ !github.event.issue.pull_request }}
-    runs-on: ubuntu-latest
-    steps:
-      - run: |
-          echo A comment on issue $NUMBER
-        env:
-          NUMBER: ${{ github.event.issue.number }}
+      - name: Checkout PR
+        run: gh pr checkout ${{ github.event.pull_request.number }}
+      - name: Push changes
+        run: git push
