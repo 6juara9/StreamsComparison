@@ -18,7 +18,7 @@ jobs:
       - run: |
           echo PR number is $NUMBER
         env:
-          NUMBER: ${{ github.event.pull_request.number }}
+          NUMBER: ${{ github.event.issue.pull_request.number }}
       - name: Checkout PR
         run: gh pr checkout ${{ github.event.pull_request.number }}
       - name: Push changes
