@@ -25,7 +25,14 @@ jobs:
         run: gh pr checkout ${{ github.event.issue.number }}
         env:
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
-
+      - name: Add changes
+        run: git add .
+        env:
+          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+      - name: Push changes
+        run: git commit -m"Schema generated"
+        env:
+          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
       - name: Push changes
         run: git push
         env:
